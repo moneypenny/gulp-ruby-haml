@@ -1,6 +1,6 @@
 {
   "name": "gulp-ruby-haml",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Compile Haml to HTML with Ruby Haml",
   "license": "MIT",
   "repository": {
@@ -12,6 +12,12 @@
     "email": "cheshire137@gmail.com",
     "url": "http://www.sarah-vessels.com"
   },
+  "contributors" : [
+      { "name"   : "Zem Zheng"
+      , "email"  : "zemzheng@gmail.com"
+      , "url"    : "https://github.com/zemzheng"
+      }
+  ],
   "engines": {
     "node": ">=0.10.0"
   },
