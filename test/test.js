@@ -1,7 +1,9 @@
 'use strict';
+var gulp   = require( 'gulp' )
 var assert = require('assert');
-var gutil = require('gulp-util');
-var haml = require('./index.js');
+var gutil  = require('gulp-util');
+var haml   = require('../index.js');
+var path  = require( 'path' );
 
 var newTest = function( desc, tips, input, output, options ){
     it( desc, function (done) {
@@ -60,4 +62,23 @@ describe('compiles Haml into HTML', function() {
             '--no-escape-attrs' : true 
         }
     );
+    it( 'Input from file', function (done) {
+        gulp
+            .src(
+                path.join( __dirname, 'input.haml' )
+            )
+            .pipe(
+                haml()
+            )
+            .on( 'data', function( file ){
+                assert.equal(
+                    file.contents.toString( 'utf-8' ),
+                    "<div class='class' id='id'>\r\n" +
+                    "  <a href='#'>innerHTML</a>\r\n" +
+                    "</div>\r\n",
+                    'Input from file then check haml result'
+                );
+                done();
+            } );
+    } );
 });
