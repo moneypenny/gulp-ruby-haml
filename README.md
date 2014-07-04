@@ -9,7 +9,7 @@ installed to use this. Try `gem install haml`. If you use
  
 * Options
 
-    use <haml -h> to get following:
+    Same as haml -h:
 
         -s, --stdin                      Read input from standard input instead of an input file
             --trace                      Show a full traceback on error
@@ -31,11 +31,11 @@ installed to use this. Try `gem install haml`. If you use
         -?, -h, --help                   Show this message
         -v, --version                    Print version
 
-* Stream Accessable, so you can use as:
+* Stream Accessable, so you can use:
     
         gulp.src( '*' )
             .pipe( other() )
-            .pipe( haml )            
+            .pipe( haml() )            
             ...
         
 
