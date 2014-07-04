@@ -1,22 +1,24 @@
 {
-  "name": "gulp-ruby-haml",
-  "version": "0.0.4",
+  "name": "gulp-ziey-ruby-haml",
+  "version": "0.0.5",
   "description": "Compile Haml to HTML with Ruby Haml",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/moneypenny/gulp-ruby-haml.git"
   },
-  "author": {
-    "name": "Sarah Vessels",
-    "email": "cheshire137@gmail.com",
-    "url": "http://www.sarah-vessels.com"
+  "author": { 
+      "name"   : "Zem Zheng", 
+      "email"  : "zemzheng@gmail.com", 
+      "url"    : "https://github.com/zemzheng"
   },
   "contributors" : [
-      { "name"   : "Zem Zheng"
-      , "email"  : "zemzheng@gmail.com"
-      , "url"    : "https://github.com/zemzheng"
+      {
+        "name": "Sarah Vessels",
+        "email": "cheshire137@gmail.com",
+        "url": "http://www.sarah-vessels.com"
       }
+      
   ],
   "engines": {
     "node": ">=0.10.0"
@@ -39,8 +41,7 @@
   "dependencies": {
     "gulp-util": "~2.2.0",
     "through2": "~0.4.0",
-    "win-spawn": "~2.0.0",
-    "clone": "~0.1.11"
+    "win-spawn": "~2.0.0"
   },
   "devDependencies": {
     "gulp": "~3.5.2",

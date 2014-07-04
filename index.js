@@ -12,7 +12,7 @@ const PLUGIN_NAME = 'gulp-ruby-haml';
 var haml = function( args, file, self, callback ){
     gutil.log(
         'Haml Input',
-        gutil.colors.yellow( file.path )
+        gutil.colors.yellow( file.path || file.contents.toString() )
     );
     var cp = spawn( 'haml ' + args.join( ' ' ) );
     var tmp_file_path = args[ args.length -1 ];

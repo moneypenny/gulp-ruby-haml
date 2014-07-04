@@ -1,10 +1,16 @@
-# gulp-ruby-haml
+# gulp-ziey-ruby-haml
 
 This is a [gulp](http://gulpjs.com/) plugin that will use the `haml` command
 line script to compile your Haml files into HTML. You need both Ruby and Haml
 installed to use this. Try `gem install haml`. If you use
 [Bundler](http://bundler.io/), add `gem 'haml'` to your Gemfile and run
 `bundle install`.
+## Update( 2014-07-04 )
+There is an Push Request in Apr 23th in [gulp-ruby-haml](https://github.com/mongorian-chop/gulp-ruby-haml) 
+and nither be accessed nor be close.
+
+Well, let's change it to gulp-ziey-ruby-haml...
+
 ## Update( 2014-07-03 from [zemzheng](https://github.com/zemzheng) )
  
 * Options
