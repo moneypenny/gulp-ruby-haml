@@ -1,97 +1,84 @@
 'use strict';
+var gulp   = require( 'gulp' )
 var assert = require('assert');
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var fs = require('fs');
-var haml = require('../index');
-var path = require('path');
+var gutil  = require('gulp-util');
+var haml   = require('../index.js');
+var path  = require( 'path' );
 
-var proj_dir = path.join(__dirname, '..');
-var dest_dir = path.join(proj_dir, 'tmp');
-var fixture_dir = path.join(__dirname, 'fixtures');
-
-describe('basic Haml conversion', function() {
-  var in_path = path.join(fixture_dir, 'basic.haml');
-
-  gulp.task('basic-haml', function() {
-    return gulp.src(in_path).
-                pipe(haml()).
-                pipe(gulp.dest(dest_dir));
-  });
-
-  it('compiles Haml into HTML', function (done) {
-    var out_path = path.join(dest_dir, 'basic.html');
-    gulp.run('basic-haml', function() {
-      assert.equal(fs.existsSync(out_path), true,
-                   'Expected ' + out_path + ' to exist');
-      var out_contents = fs.readFileSync(out_path);
-      var expected = "<p>Hello world!</p>\n" +
-                     "<a href='http://example.com'>Example</a>\n" +
-                     "<div ng-include=\"'tpl.html'\"></div>\n";
-      assert.equal(out_contents, expected, 'Haml was not compiled as expected');
-      fs.unlink(out_path, function (err) {});
-      done();
+var newTest = function( desc, tips, input, output, options ){
+    it( desc, function (done) {
+        var myHaml = haml( options || {} );
+        myHaml.once( 'data', function( file ){
+            assert.equal(
+                file.contents.toString( 'utf-8' ),
+                output,
+                tips
+            );
+            myHaml.end();
+            done();
+        } );
+        myHaml.write(
+            new gutil.File({
+                contents : new Buffer( input )
+            })
+        );
     });
-  });
-});
+}
 
-describe('basic Haml conversion with double quotes', function() {
-  var in_path = path.join(fixture_dir, 'basic.haml');
-
-  gulp.task('quoted-haml', function() {
-    return gulp.src(in_path).
-                pipe(haml({doubleQuote: true})).
-                pipe(gulp.dest(dest_dir));
-  });
-
-  it('compiles Haml into HTML with double-quoted attributes', function (done) {
-    var out_path = path.join(dest_dir, 'basic.html');
-    gulp.run('quoted-haml', function() {
-      assert.equal(fs.existsSync(out_path), true,
-                   'Expected ' + out_path + ' to exist');
-      var out_contents = fs.readFileSync(out_path);
-      var expected = "<p>Hello world!</p>\n" +
-                     "<a href=\"http://example.com\">Example</a>\n" +
-                     "<div ng-include=\"'tpl.html'\"></div>\n";
-      assert.equal(out_contents, expected, 'Haml was not compiled as expected');
-      fs.unlink(out_path, function (err) {});
-      done();
-    });
-  });
-});
-
-describe('invalid Haml', function() {
-  var in_path = path.join(fixture_dir, 'invalid.haml');
-  var error = null;
-
-  gulp.task('invalid-haml', function() {
-    return gulp.src(in_path).
-                pipe(haml().on('error', function (err) { error = err; })).
-                pipe(gulp.dest(dest_dir));
-  });
-
-  it('does not compile invalid Haml into HTML', function (done) {
-    var out_path = path.join(dest_dir, 'invalid.html');
-    gulp.run('invalid-haml', function() {
-      assert.equal(fs.existsSync(out_path), false,
-                   'Expected ' + out_path + ' to not exist');
-      done();
-    });
-  });
-
-  it('does not copy source Haml file into destination dir', function (done) {
-    var src_in_dest = path.join(dest_dir, 'invalid.haml');
-    gulp.run('invalid-haml', function() {
-      assert.equal(fs.existsSync(src_in_dest), false,
-                   'Expected ' + src_in_dest + ' to not exist');
-      done();
-    });
-  });
-
-  it('emits an error', function (done) {
-    gulp.run('invalid-haml', function() {
-      assert(error.message.indexOf('Syntax error') > -1);
-      done();
-    });
-  });
+describe('compiles Haml into HTML', function() {
+    newTest(
+        'dom',
+        'Haml was not compiled as expected',
+        '%div abc',
+        '<div>abc</div>\r\n'
+    );
+    newTest(
+        'attr',
+        'Haml was not compiled as expected',
+        '%div( a=1 )',
+        "<div a='1'></div>\r\n"
+    );
+    newTest(
+        'double quot',
+        'Haml was not compiled as expected',
+        '%div( a=1 )',
+        '<div a="1"></div>\r\n',
+        { '-q' : true }
+    );
+    newTest(
+        'double quot',
+        'Haml was not compiled as expected',
+        '%div( a="<a>" )',
+        '<div a="&lt;a&gt;"></div>\r\n',
+        { '-q' : true }
+    );
+    newTest(
+        'double quot',
+        'Haml was not compiled as expected',
+        '%div( a="<a>" )',
+        '<div a="<a>"></div>\r\n',
+        { 
+            '-q' : true,
+            '--no-escape-attrs' : true 
+        }
+    );
+    it( 'Input from file', function (done) {
+        gulp
+            .src(
+                path.join( __dirname, 'input.haml' )
+            )
+            .pipe(
+                haml()
+            )
+            .on( 'data', function( file ){
+                assert.equal(
+                    file.contents.toString( 'utf-8' ),
+                    "<div class='class' id='id'>\r\n" +
+                    "  <a href='#'>innerHTML</a>\r\n" +
+                    "</div>\r\n",
+                    'Input from file then check haml result'
+                );
+                done();
+            } );
+    } );
 });
