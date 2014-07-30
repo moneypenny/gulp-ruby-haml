@@ -23,11 +23,16 @@ module.exports = function (opt) {
     var options = {};
     options.outExtension = opt.outExtension || '.html';
     options.doubleQuote = opt.doubleQuote || false;
+    options.require = opt.require || false;
 
     var str = file.contents.toString('utf8');
     var args = ['haml'];
     if (options.doubleQuote) {
       args.push('-q');
+    }
+    if(options.require) {
+      args.push('-r');
+      args.push(options.require);
     }
     args.push(file.path);
     var cp = spawn(args.shift(), args);
