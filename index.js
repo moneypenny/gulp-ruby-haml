@@ -99,7 +99,7 @@ module.exports = function(opt) {
           message = noHamlError;
         }
       }
-      self.emit('error', new PluginError(PLUGIN_NAME, message));
+      self.emit('error', new PluginError(PLUGIN_NAME, file.path + '\n' + message));
       return callback(null, file);
     });
 
@@ -120,7 +120,7 @@ module.exports = function(opt) {
 
     cp.on('close', function(code) {
       if (errors) {
-        self.emit('error', new PluginError(PLUGIN_NAME, errors));
+        self.emit('error', new PluginError(PLUGIN_NAME, file.path + '\n' + errors));
         return callback(null, null);
       }
 
